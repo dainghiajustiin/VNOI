@@ -1,0 +1,87 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fi first
+#define se second
+#define ll long long
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+#define Mp make_pair
+#define lg2(x) 31 - __builtin_clz(x)
+using pii = pair<int,int>;
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using ull = unsigned long long;
+
+/// code
+int n;
+ll k;
+struct matrix{
+    ll x[50][50];
+};
+
+matrix operator * (matrix& a, matrix& b){
+    matrix c;
+
+    memset(c.x, 0, sizeof c.x);
+
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            for(int k = 0; k < n; k++){
+                c.x[i][j] = (c.x[i][j] + a.x[i][k]*b.x[k][j]) % MOD;
+            }
+        }
+    }
+
+    return c;
+}
+
+matrix bin_pow(matrix& a, ll N){
+    if(N == 0){
+        matrix I;
+
+        memset(I.x, 0, sizeof I.x);
+
+        for(int i = 0; i < n; i++) I.x[i][i] = 1;
+
+        return I;
+    }
+
+    matrix res = bin_pow(a, N >> 1);
+    res = (res * res);
+    if(N & 1) res = (res * a);
+    return res;
+}
+
+matrix a;
+
+signed main(){
+    cin.tie(0)->ios_base::sync_with_stdio(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    if(fopen("buon.inp", "r")){
+        freopen("buon.inp", "r", stdin);
+        freopen("buon.out", "w", stdout);
+    }
+
+    cin >> n >> k;
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++) cin >> a.x[i][j];
+    }
+
+    matrix res = bin_pow(a, k);
+
+    ll ans = 0;
+
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++) ans = (ans + res.x[i][j]) % MOD;
+    }
+
+    cout << ans;
+
+    return 0;
+}   /// Justiin
