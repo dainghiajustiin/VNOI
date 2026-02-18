@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+const int N = (int) 1e5 + 3;
+const ll Lim = (ll) 1e18 + 3;
+
+set<pair<ll, ll>> Pivot;
+int nSize;
+ll a[N], K;
+
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    #define TASK "hp_thpt_21_c"
+    if(fopen(TASK".inp", "r")){
+        freopen(TASK".inp", "r", stdin);
+        freopen(TASK".out", "w", stdout);
+//        freopen(TASK".ans", "w", stdout);
+    }
+
+    cin >> nSize >> K;
+    for(int i = 1; i <= nSize; i++) cin >> a[i];
+
+    Pivot.insert(make_pair(Lim, Lim));
+    for(int i = 1; i <= nSize; i++){
+        set<pair<ll, ll>>::iterator it = Pivot.lower_bound(make_pair(2LL*K - a[i], -Lim));
+        pair<ll, ll> x = *it;
+
+        if(x.first == 2LL*K - a[i]){
+            cout << x.second << ' ' << i;
+            return 0;
+        }
+
+        Pivot.insert(make_pair(a[i], i));
+    }
+
+    cout << 0 << ' ' << 0;
+
+    return 0;
+}
