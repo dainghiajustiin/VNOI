@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+
+const int N = (int) 1e6 + 3;
+const ll Lim = (ll) 1e18 + 7;
+
+ll a[N], nSize, K;
+ll maxTest;
+set<ll> Value;
+
+void solve(){
+    Value.clear();
+    Value.insert(Lim);
+
+    cin >> nSize >> K;
+    for(int i = 1; i <= nSize; i++){
+        cin >> a[i];
+    }
+
+    if(K % 2 == 0){
+        cout << 0;
+        return;
+    }
+
+    for(int i = 1; i <= nSize; i++){
+        set<ll>::iterator it = Value.lower_bound(K - a[i]);
+        ll x = *it;
+        if(x == K - a[i]){
+            cout << 1;
+            return;
+        }
+        Value.insert(a[i]);
+    }
+
+    cout << 0;
+}
+
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define TASK ""
+//    if(fopen(TASK".inp", "r")){
+//        freopen(TASK".inp", "r", stdin);
+//        freopen(TASK".out", "w", stdout);
+//        freopen(TASK".ans", "w", stdout);
+//    }
+
+    cin >> maxTest;
+    for(int i = 1; i <= maxTest; i++){
+        solve();
+    }
+
+    return 0;
+}
