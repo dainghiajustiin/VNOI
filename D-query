@@ -1,0 +1,111 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fi first
+#define se second
+#define ll long long
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+#define Mp make_pair
+using pii = pair<int,int>;
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using ull = unsigned long long;
+
+/// code
+const int maxn = (int) 1e6 + 3;
+int n, q, sz = (int) 1e6;
+int a[maxn];
+int seg[maxn << 2];
+int last[maxn];
+
+struct query{
+    int ans, le, ri, id;
+} Q[maxn];
+
+void upd(int id, int l, int r, int pos, int val){
+    if(pos < l || r < pos) return;
+    if(l == r){
+        seg[id] += val;
+        return;
+    }
+
+    int m = l + r >> 1;
+
+    upd(id << 1, l, m, pos, val);
+    upd(id << 1 | 1, m + 1, r, pos, val);
+
+    seg[id] = seg[id << 1] + seg[id << 1 | 1];
+}
+
+int get(int id, int l, int r, int u, int v){
+    if(v < l || r < u) return 0;
+    if(u <= l && r <= v) return seg[id];
+
+    int m = l + r >> 1;
+
+    int it1 = get(id << 1, l, m, u, v);
+    int it2 = get(id << 1 | 1, m + 1, r, u, v);
+
+    return it1 + it2;
+}
+
+bool cmp1(query x, query y){
+    return x.ri < y.ri;
+}
+
+bool cmp2(query x, query y){
+    return x.id < y.id;
+}
+
+signed main(){
+    cin.tie(0)->ios_base::sync_with_stdio(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    if(fopen("buon.inp", "r")){
+        freopen("buon.inp", "r", stdin);
+        freopen("buon.out", "w", stdout);
+    }
+
+    cin >> n;
+    for(int i = 1; i <= n; i++) cin >> a[i];
+
+    cin >> q;
+    for(int i = 1; i <= q; i++){
+        cin >> Q[i].le >> Q[i].ri;
+        Q[i].id = i;
+    }
+
+    sort(Q + 1, Q + 1 + q, cmp1);
+
+    int j = 1;
+    for(int r = 1; r <= n; r++){
+        if(last[a[r]]){
+            upd(1, 1, sz, last[a[r]], -1);
+            last[a[r]] = r;
+            upd(1, 1, sz, r, 1);
+        }
+        else{
+            last[a[r]] = r;
+            upd(1, 1, sz, r, 1);
+        }
+
+        while(Q[j].ri == r && j <= q){
+            if(Q[j].ri == r){
+                Q[j].ans = get(1, 1, sz, Q[j].le, Q[j].ri);
+            }
+
+            j++;
+        }
+    }
+
+    sort(Q + 1, Q + 1 + q, cmp2);
+
+    for(int i = 1; i <= q; i++) cout << Q[i].ans << el;
+
+    return 0;
+}   /// Justiin
