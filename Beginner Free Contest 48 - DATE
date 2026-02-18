@@ -1,0 +1,64 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 1e5 + 7;
+int n, m;
+vector<int> par[maxn];
+int cnt[maxn];
+
+void dfs(int u, bool& ok){
+    if(cnt[u]){
+        ok = 1;
+        return;
+    }
+
+    for(int v:par[u]){
+        bool ok_ = 0;
+        dfs(v, ok_);
+        if(ok_){
+            ok = 1;
+            (cnt[u] += cnt[v]) %= MOD;
+        }
+    }
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> m;
+
+    while(m--){
+        int a, b; cin >> a >> b;
+        par[b].pb(a);
+    }
+
+    cnt[1] = 1;
+    bool ok = 0;
+    dfs(n, ok);
+
+    cout << cnt[n];
+
+    return 0;
+}
+///      Today is 03.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
