@@ -1,0 +1,48 @@
+/* TRAN DAI NGHIA */
+#include<bits/stdc++.h>
+#define uns unsigned
+#define ll long long
+#define db double
+#define str string
+#define MOD 1000000007
+#define Birthday 15012007
+#define first fi
+#define second se
+#define pb push_back
+#define Task ""
+#define el "\n"
+using namespace std;
+
+int t,n;
+str f[103];
+
+str Plus(str a,str b){
+    str ans;
+    int Memory=0;
+    for(int i=0;i<b.size();i++){
+        int Sum=(a[a.size()-1-i]-'0') + (b[b.size()-1-i]-'0') +Memory;
+        Memory=Sum/10;
+        ans=(char)(Sum%10+48) + ans;
+    }
+    for(int i=b.size();i<a.size();i++){
+        int Sum=(a[a.size()-1-i]-'0') +Memory;
+        Memory=Sum/10;
+        ans=(char)(Sum%10+48) + ans;
+    }
+    if(Memory) ans= '1' + ans;
+    return ans;
+}
+
+int main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(NULL);cout.tie(NULL);
+    f[1]="1",f[2]="2";
+    for(int i=3;i<=100;i++) f[i]=Plus(f[i-1],f[i-2]);
+    cin>>t;
+    while(t--){
+        cin>>n;
+        cout<<f[n]<<el;
+    }
+    
+	return 0;
+}
