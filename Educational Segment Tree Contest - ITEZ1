@@ -1,0 +1,94 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 1e5 + 3;
+int a[maxn], seg[maxn << 2];
+int n, q;
+
+void build(int id, int l, int r){
+    if(l == r){
+        seg[id] = a[l];
+        return;
+    }
+
+    int m = l + r >> 1;
+
+    build(id << 1, l, m);
+    build(id << 1 | 1, m + 1, r);
+
+    seg[id] = max(seg[id << 1], seg[id << 1 | 1]);
+}
+void upd(int id, int l, int r, int pos){
+    if(pos < l || r < pos) return;
+    if(l == r){
+        seg[id] = a[l];
+        return;
+    }
+
+    int m = l + r >> 1;
+
+    upd(id << 1, l, m, pos);
+    upd(id << 1 | 1, m + 1, r, pos);
+
+    seg[id] = max(seg[id << 1], seg[id << 1 | 1]);
+}
+int get(int id, int l, int r, int u, int v){
+    if(v < l || r < u) return -inf;
+    if(u <= l && r <= v) return seg[id];
+
+    int m = l + r >> 1;
+
+    int it1 = get(id << 1, l, m, u, v);
+    int it2 = get(id << 1 | 1, m + 1, r, u, v);
+
+    return max(it1, it2);
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n;
+    for(int i = 1; i <= n; i++) cin >> a[i];
+
+    build(1, 1, n);
+
+    cin >> q;
+    while(q--){
+        int type; cin >> type;
+
+        if(type == 1){
+            int x, y; cin >> x >> y;
+            a[x] = y;
+            upd(1, 1, n, x);
+        }
+        else{
+            int l, r; cin >> l >> r;
+            int ans = get(1, 1, n, l, r);
+            cout << ans << el;
+        }
+    }
+
+    return 0;
+}
+///      Today is 03.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
