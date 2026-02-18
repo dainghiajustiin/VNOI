@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 1e5 + 3;
+int r[maxn];
+int p;
+
+int Find(int u){
+    if(u == r[u]) return u;
+    return r[u] = Find(r[u]);
+}
+
+void Union(int u, int v){
+    u = Find(u);
+    v = Find(v);
+    r[v] = u;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    for(int i = 1; i <= 100000; i++) r[i] = i;
+
+    cin >> p;
+    while(p--){
+        int type, u, v;
+        cin >> u >> v >> type;
+
+        if(type == 1){
+            Union(u, v);
+        }
+        else{
+            u = Find(u);
+            v = Find(v);
+
+            cout << (u == v) << el;
+        }
+    }
+
+    return 0;
+}
+///      Today is 05.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
