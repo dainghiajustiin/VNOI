@@ -1,0 +1,98 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int maxN = (int) 1e5 + 1;
+const int modulo = (int) 1e9 + 7;
+
+using ll = long long;
+
+struct Node{
+    ll sum = 0;
+    ll add = 0;
+    ll inc = 0;
+} tree[maxN << 2];
+
+int N, Q;
+
+void down(int idx, int L, int R){
+    int Middle = (L + R)/2;
+    int leftSize = Middle - L + 1;
+    int rightSize = R - Middle;
+
+    Node& curNode = tree[idx];
+    Node& leftNode = tree[idx << 1];
+    Node& rightNode = tree[idx << 1 | 1];
+
+    if(curNode.add == 0 && curNode.inc == 0) return;
+
+    /// Left Down
+    leftNode.sum = (leftNode.sum + curNode.add*leftSize + curNode.inc*leftSize*(leftSize - 1)/2) % modulo;
+    leftNode.add = (leftNode.add + curNode.add) % modulo;
+    leftNode.inc = (leftNode.inc + curNode.inc) % modulo;
+
+    /// Right Down
+    ll addRight = curNode.add + curNode.inc*leftSize;
+    rightNode.sum = (rightNode.sum + addRight*rightSize + curNode.inc*rightSize*(rightSize - 1)/2) % modulo;
+    rightNode.add = (rightNode.add + addRight) % modulo;
+    rightNode.inc = (rightNode.inc + curNode.inc) % modulo;
+
+    /// Delete
+    curNode.add = curNode.inc = 0;
+}
+
+void update(int idx, int L, int R, int leftPos, int rightPos, int firstTerm, int Delta){
+    if(rightPos < L || R < leftPos) return;
+    if(leftPos <= L && R <= rightPos){
+        ll thisSize = R - L + 1;
+        ll start = firstTerm + 1LL*(L - leftPos)*Delta;
+        tree[idx].sum = (tree[idx].sum + start*thisSize + thisSize*(thisSize - 1)*Delta/2) % modulo;
+        tree[idx].add = (tree[idx].add + start) % modulo;
+        tree[idx].inc = (tree[idx].inc + Delta) % modulo;
+        return;
+    }
+
+    down(idx, L, R);
+    int Middle = (L + R)/2;
+
+    update(idx << 1, L, Middle, leftPos, rightPos, firstTerm, Delta);
+    update(idx << 1 | 1, Middle + 1, R, leftPos, rightPos, firstTerm, Delta);
+
+    tree[idx].sum = (tree[idx << 1].sum + tree[idx << 1 | 1].sum) % modulo;
+}
+
+ll get(int idx, int L, int R, int leftPos, int rightPos){
+    if(rightPos < L || R < leftPos) return 0;
+    if(leftPos <= L && R <= rightPos) return tree[idx].sum;
+
+    down(idx, L, R);
+    int Middle = (L + R)/2;
+
+    return (get(idx << 1, L, Middle, leftPos, rightPos) +
+            get(idx << 1 | 1, Middle + 1, R, leftPos, rightPos)) % modulo;
+}
+
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+
+    cin >> N >> Q;
+
+    for(int i = 1; i <= Q; i++){
+        int type; cin >> type;
+
+        if(type & 1){
+            int L, R, firstTerm, Delta;
+            cin >> L >> R >> firstTerm >> Delta;
+            update(1, 1, N, L, R, 0, firstTerm);
+            update(1, 1, N, L, R, Delta, 0);
+        }
+        else{
+            int L, R;
+            cin >> L >> R;
+
+            cout << get(1, 1, N, L, R) << '\n';
+        }
+    }
+
+    return 0;
+}
