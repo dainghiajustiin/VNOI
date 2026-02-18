@@ -1,0 +1,78 @@
+/*      Today is 29.02.2024
+    Do your best because tomorrow will be better!
+                                sign
+                               Justiin
+*/
+
+#include<bits/stdc++.h>
+#define int long long
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define Task ""
+#define bit(x) (1 << (x))
+
+using namespace std;
+
+using ll = long long;
+using str = string;
+using pii = pair<int,int>;
+using db = double;
+
+const int MOD = 1e9 + 7;
+const int inf = 2e18;
+
+//Link:
+//Program:
+
+//Begin
+
+int n;
+int a[29];
+str s;
+
+signed main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	cin >> n;
+	cin >> s;
+
+	for(int i = 0; i < 26; i++) cin >> a[i];
+
+	str ans;
+	int i = 0;
+
+	for(auto x:s){
+        if( x != '?' ){
+            a[1ll * (x - 'a')]--;
+            if(a[1ll * (x - 'a')] < 0) return cout << -1, 0;
+        }
+	}
+
+	for(auto x:s){
+        if( x != '?' ){
+            ans += x;
+        }
+        else{
+            while(!a[i] && i < 26) i++;
+
+            if(i >= 26) return cout << -1, 0;
+            ans += char(i + 'a');
+            a[i]--;
+            if(a[i] < 0) return cout << -1, 0;
+        }
+	}
+
+
+	for(int ii = 0; ii < 26; ii++) if( a[ii] != 0 ) return cout << -1, 0;
+
+	cout << ans;
+
+
+    return 0;
+}
+
+// End.
