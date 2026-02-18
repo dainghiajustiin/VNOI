@@ -1,0 +1,76 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = (int) 1e5 + 3;
+
+int nSize, nQuery;
+int cnt[N << 2];
+bool lazy[N << 2];
+
+void down(int id, int l, int r){
+    if(lazy[id] == 0) return;
+
+    int m = l + r >> 1;
+    lazy[id] = 0;
+
+    lazy[id << 1] ^= 1;
+    lazy[id << 1 | 1] ^= 1;
+
+    cnt[id << 1] = (m - l + 1) - cnt[id << 1];
+    cnt[id << 1 | 1] = (r - m) - cnt[id << 1 | 1];
+}
+
+void upd(int id, int l, int r, int u, int v){
+    if(v < l || r < u) return;
+    if(u <= l && r <= v){
+        cnt[id] = (r - l + 1) - cnt[id];
+        lazy[id] ^= 1;
+        return;
+    }
+
+    down(id, l, r);
+    int m = l + r >> 1;
+
+    upd(id << 1, l, m, u, v);
+    upd(id << 1 | 1, m + 1, r, u, v);
+
+    cnt[id] = cnt[id << 1] + cnt[id << 1 | 1];
+}
+
+int get(int id, int l, int r, int u, int v){
+    if(v < l || r < u) return 0;
+    if(u <= l && r <= v) return cnt[id];
+
+    down(id, l, r);
+    int m = l + r >> 1;
+
+    return get(id << 1, l, m, u, v) + get(id << 1 | 1, m + 1, r, u, v);
+}
+
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define TASK ""
+//    if(fopen(TASK".inp", "r")){
+//        freopen(TASK".inp", "r", stdin);
+//        freopen(TASK".out", "w", stdout);
+//        freopen(TASK".ans", "w", stdout);
+//    }
+
+    cin >> nSize >> nQuery;
+
+    for(int i = 1; i <= nQuery; i++){
+        int type, l, r; cin >> type >> l >> r;
+
+        if(type == 0){
+            upd(1, 1, nSize, l, r);
+        }
+        else{
+            int ans = get(1, 1, nSize, l ,r);
+            cout << ans << '\n';
+        }
+    }
+
+    return 0;
+}
