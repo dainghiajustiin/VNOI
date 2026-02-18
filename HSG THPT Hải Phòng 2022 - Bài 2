@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = (int) 1e4 + 7;
+
+int nSize;
+string a[N];
+
+bool cmp(string& a, string& b){
+    string AB = a + b;
+    string BA = b + a;
+
+    return AB < BA;
+}
+
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define TASK ""
+//    if(fopen(TASK".inp", "r")){
+//        freopen(TASK".inp", "r", stdin);
+//        freopen(TASK".out", "w", stdout);
+//        freopen(TASK".ans", "w", stdout);
+//    }
+
+    cin >> nSize;
+    for(int i = 1; i <= nSize; i++) cin >> a[i];
+
+    sort(a + 1, a + 1 + nSize, cmp);
+    for(int i = nSize; i > 0; i--) cout << a[i];
+
+    return 0;
+}
