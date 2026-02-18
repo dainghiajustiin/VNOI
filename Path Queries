@@ -1,0 +1,118 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fi first
+#define se second
+#define ll long long
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+#define Mp make_pair
+#define lg2(x) 31 - __builtin_clz(x)
+using pii = pair<int,int>;
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using ull = unsigned long long;
+
+/// code
+const int maxn = (int) 2e5 + 3;
+int timeIn[maxn];
+int timeOut[maxn];
+int a[maxn];
+ll IT[maxn << 2];
+ll dp[maxn];
+vector<int> adj[maxn];
+int numNode, numQuery;
+int timeDfs = 0;
+
+void dfs(int u, int p){
+    timeIn[u] = ++timeDfs;
+
+    for(int v:adj[u]){
+        if(v == p) continue;
+
+        dp[v] = dp[u] + a[v];
+        dfs(v, u);
+    }
+
+    timeOut[u] = timeDfs;
+}
+
+void down(int id){
+    ll k = IT[id]; IT[id] = 0;
+
+    IT[id << 1] += k;
+    IT[id << 1 | 1] += k;
+}
+
+void upd(int id, int l, int r, int u, int v, int val){
+    if(v < l || r < u) return;
+    if(u <= l && r <= v){
+        IT[id] += val;
+        return;
+    }
+
+    down(id);
+    int m = l + r >> 1;
+
+    upd(id << 1, l, m, u, v, val);
+    upd(id << 1 | 1, m + 1, r, u, v, val);
+}
+
+ll get(int id, int l, int r, int pos){
+    if(pos < l || r < pos) return 0;
+    if(l == r) return IT[id];
+
+    down(id);
+    int m = l + r >> 1;
+
+    ll it1 = get(id << 1, l, m, pos);
+    ll it2 = get(id << 1 | 1, m + 1, r, pos);
+
+    return it1 + it2;
+}
+
+signed main(){
+    cin.tie(0)->ios_base::sync_with_stdio(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    if(fopen("buon.inp", "r")){
+        freopen("buon.inp", "r", stdin);
+        freopen("buon.out", "w", stdout);
+    }
+
+    cin >> numNode >> numQuery;
+
+    for(int i = 1; i <= numNode; i++) cin >> a[i];
+
+    for(int i = 1; i < numNode; i++){
+       int u, v;
+       cin >> u >> v;
+       adj[u].pb(v);
+       adj[v].pb(u);
+    }
+
+    dp[1] = a[1];
+    dfs(1, 0);
+
+    while(numQuery--){
+        int type; cin >> type;
+
+        if(type == 1){
+            int s, x; cin >> s >> x;
+            upd(1, 1, numNode, timeIn[s], timeOut[s], x - a[s]);
+            a[s] = x;
+        }
+        else{
+            int s; cin >> s;
+            ll ans = get(1, 1, numNode, timeIn[s]) + dp[s];
+
+            cout << ans << el;
+        }
+    }
+
+    return 0;
+}   /// Justiin
