@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 1e5 + 3;
+int n, m;
+vector<int> vec[maxn];
+int cnt[maxn];
+int val[maxn];
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> m;
+    while(m--){
+        int u, v; cin >> u >> v;
+        cnt[v]++;
+        vec[u].pb(v);
+    }
+
+    queue<int> q;
+
+    for(int i = 1; i <= n; i++){
+        if(!cnt[i]) q.push(i);
+    }
+
+    while(!q.empty()){
+        int u = q.front(); q.pop();
+
+        for(int v:vec[u]){
+            cnt[v]--;
+            val[v] = max(val[v], val[u] + 1);
+            if(!cnt[v]) q.push(v);
+        }
+    }
+
+    int ans = 0;
+    for(int i = 1; i <= n; i++) ans = max(ans, val[i]);
+    cout << ans;
+
+    return 0;
+}
+///      Today is 04.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
