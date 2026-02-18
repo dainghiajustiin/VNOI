@@ -1,0 +1,114 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 1e3 + 3;
+const int len = log2(maxn) + 1;
+
+pii par[maxn][len];
+int h[maxn];
+int n, q;
+vector<pii> vec[maxn];
+
+void dfs(int u, int p){
+    for(pii it:vec[u]){
+        int v = it.se;
+        if(v == p) continue;
+
+        h[v] = h[u] + 1;
+        par[v][0].fi = u;
+        par[v][0].se = it.fi;
+
+        for(int i = 1; i < len; i++){
+            par[v][i].fi = par[par[v][i - 1].fi][i - 1].fi;
+            par[v][i].se = par[v][i - 1].se + par[par[v][i - 1].fi][i - 1].se;
+        }
+
+        dfs(v, u);
+    }
+}
+
+int lca(int u, int v){
+    if(h[u] < h[v]) swap(u, v);
+
+    int d = h[u] - h[v];
+    for(int i = 0; (1 << i) <= d; i++){
+        if((d >> i) & 1){
+            u = par[u][i].fi;
+        }
+    }
+
+    if(u == v) return u;
+
+    int lg = log2(h[u]);
+    for(int i = lg; i > -1; i--){
+        if(par[u][i].fi != par[v][i].fi){
+            u = par[u][i].fi;
+            v = par[v][i].fi;
+        }
+    }
+
+    return par[u][0].fi;
+}
+
+int get(int child, int p){
+    int res = 0;
+    int d = h[child] - h[p];
+
+    for(int i = 0; (i << 1) <= d; i++){
+        if((d >> i) & 1){
+            res += par[child][i].se;
+            child = par[child][i].fi;
+        }
+    }
+
+    return res;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> q;
+    for(int i = 1; i < n; i++){
+        int u, v, w;
+        cin >> u >> v >> w;
+        vec[u].pb(Mp(w, v));
+        vec[v].pb(Mp(w, u));
+    }
+
+    dfs(1, 0);
+
+    while(q--){
+        int u, v;
+        cin >> u >> v;
+
+        int T = lca(u, v);
+
+        int ans = get(u, T) + get(v, T);
+
+        cout << ans << el;
+    }
+
+    return 0;
+}
+///      Today is 05.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
