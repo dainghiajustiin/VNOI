@@ -1,0 +1,101 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fi first
+#define se second
+#define ll long long
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+#define Mp make_pair
+using pii = pair<int,int>;
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using ull = unsigned long long;
+
+/// code
+const int maxn = (int) 2e5 + 3;
+int n, q, m = 0, root = 1;
+int h[maxn];
+int st[maxn];
+int en[maxn];
+int tour[maxn];
+vector<int> vec[maxn];
+
+int a[maxn];
+ll BIT[maxn];
+
+void dfs(int u, int p){
+    tour[++m] = u;
+    st[u] = m;
+
+    for(int v:vec[u]){
+        if(v == p) continue;
+        dfs(v, u);
+    }
+
+    en[u] = m;
+}
+
+void upd(int x, int val){
+    while(x <= n){
+        BIT[x] += val;
+        x += x&-x;
+    }
+}
+
+ll get(int x){
+    ll res = 0;
+    while(x){
+        res += BIT[x];
+        x -= x&-x;
+    }
+
+    return res;
+}
+
+signed main(){
+    cin.tie(0)->ios_base::sync_with_stdio(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    if(fopen("buon.inp", "r")){
+        freopen("buon.inp", "r", stdin);
+        freopen("buon.out", "w", stdout);
+    }
+
+    cin >> n >> q;
+    for(int i = 1; i <= n; i++) cin >> a[i];
+
+    for(int i = 1; i < n; i++){
+        int u, v; cin >> u >> v;
+        vec[u].pb(v);
+        vec[v].pb(u);
+    }
+
+    dfs(root, 0);
+
+    for(int i = 1; i <= n; i++){
+        upd(st[i], a[i]);
+    }
+
+    while(q--){
+        int type; cin >> type;
+        if(type == 1){
+            int i, x; cin >> i >> x;
+
+            upd(st[i], x - a[i]);
+
+            a[i] = x;
+        }
+        else{
+            int u; cin >> u;
+            ll ans = get(en[u]) - get(st[u] - 1);
+            cout << ans << el;
+        }
+    }
+
+    return 0;
+}   /// Justiin
