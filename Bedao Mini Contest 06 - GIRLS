@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+int n, m, k;
+const int maxn = (int) 1e6 + 3;
+
+int a[maxn];
+ll pre[maxn];
+ll ans = -inf;
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> m >> n >> k;
+
+    for(int i = 1; i <= m; i++) cin >> a[i];
+    sort(a + 1, a + 1 + m);
+
+    for(int i = 1; i <= m; i++){
+        pre[i] = pre[i - 1] + a[i];
+        if(i >= n && a[i] - a[i - n + 1] <= k) ans = max(ans, pre[i] - pre[i - n]);
+    }
+
+    if(ans > -inf) cout << ans;
+    else cout << -2;
+
+    return 0;
+}
+///      Today is 20.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
