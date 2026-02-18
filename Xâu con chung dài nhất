@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fi first
+#define se second
+#define ll long long
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+#define Mp make_pair
+#define lg2(x) 31 - __builtin_clz(x)
+using pii = pair<int,int>;
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using ull = unsigned long long;
+
+/// code
+const int maxn = 2003;
+
+int dp[maxn][maxn];
+string s, t;
+int n, m;
+
+signed main(){
+    cin.tie(0)->ios_base::sync_with_stdio(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    if(fopen("buon.inp", "r")){
+        freopen("buon.inp", "r", stdin);
+        freopen("buon.out", "w", stdout);
+    }
+
+    cin >> s >> t;
+    n = s.size(); s = ' ' + s;
+    m = t.size(); t = ' ' + t;
+
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= m; j++){
+            dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+            if(s[i] == t[j]) dp[i][j] = max(dp[i][j], dp[i - 1][j - 1] + 1);
+        }
+    }
+
+    cout << dp[n][m];
+
+    return 0;
+}   /// Justiin
