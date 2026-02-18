@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+int a, b, c;
+
+int dp[81];
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> a >> b >> c;
+
+    for(int i = 1; i <= a; i++){
+        for(int j = 1; j <= b; j++){
+            for(int k = 1; k <= c; k++) dp[i + j + k]++;
+        }
+    }
+    int id = 0;
+    for(int i = 3; i <= a + b + c; i++)
+        if(dp[id] < dp[i]) id = i;
+
+    cout << id;
+
+    return 0;
+}
+///      Today is 04.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
