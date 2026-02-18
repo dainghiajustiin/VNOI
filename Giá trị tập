@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int maxN = (int) 3e5 + 1;
+
+int N, M;
+int r[maxN];
+int getMin[maxN];
+int getMax[maxN];
+int cntElm[maxN];
+
+int Find(int u){
+    if(u == r[u]) return u;
+    return r[u] = Find(r[u]);
+}
+
+void Union(int u, int v){
+    u = Find(u);
+    v = Find(v);
+
+    if(u == v) return;
+
+    r[v] = u;
+    getMin[u] = min(getMin[u], getMin[v]);
+    getMax[u] = max(getMax[u], getMax[v]);
+    cntElm[u] += cntElm[v];
+}
+
+void print(int u){
+    u = Find(u);
+
+    cout << getMin[u] << ' ' << getMax[u] << ' ' << cntElm[u] << '\n';
+}
+
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+
+    cin >> N >> M;
+
+    for(int i = 1; i <= N; i++){
+        r[i] = getMin[i] = getMax[i] = i;
+        cntElm[i] = 1;
+    }
+
+    while(M--){
+        string s; cin >> s;
+
+        if(s == "union"){
+            int u, v; cin >> u >> v;
+            Union(u, v);
+        }
+        else{
+            int u; cin >> u;
+            print(u);
+        }
+    }
+
+    return 0;
+}
