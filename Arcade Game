@@ -1,0 +1,147 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fi first
+#define se second
+#define ll long long
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+#define Mp make_pair
+#define lg2(x) 31 - __builtin_clz(x)
+using pii = pair<int,int>;
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using ull = unsigned long long;
+
+/// code
+const int maxn = (int) 2e5 + 3;
+const int len = lg2(maxn) + 1;
+
+int par[maxn][len];
+int h[maxn];
+int timeIn[maxn];
+int timeOut[maxn];
+vector<pii> adj[maxn];
+int a[maxn];
+ll BIT[maxn];
+int numNode, numQuery;
+int timeDfs = 0;
+
+struct dataa{
+    int u, v, w;
+} Q[maxn];
+
+void dfs(int u, int p){
+    timeIn[u] = ++timeDfs;
+
+    for(pii it:adj[u]){
+        int v = it.se;
+        if(v == p) continue;
+
+        a[v] = it.fi;
+        h[v] = h[u] + 1;
+        par[v][0] = u;
+
+        for(int i = 1; i < len; i++) par[v][i] = par[par[v][i - 1]][i - 1];
+
+        dfs(v, u);
+    }
+
+    timeOut[u] = timeDfs;
+}
+
+int lca(int u, int v){
+    if(h[u] < h[v]) swap(u, v);
+
+    int diff = h[u] - h[v];
+    for(int i = 0; (1 << i) <= diff; i++){
+        if((diff >> i) & 1) u = par[u][i];
+    }
+
+    if(u == v) return u;
+
+    int lg = lg2(h[u]);
+
+    for(int i = lg; i > -1; i--){
+        if(par[u][i] != par[v][i]){
+            u = par[u][i];
+            v = par[v][i];
+        }
+    }
+
+    return par[u][0];
+}
+
+void upd(int x, int val){
+    while(x <= numNode){
+        BIT[x] += val;
+        x += x&-x;
+    }
+}
+
+ll get(int x){
+    ll res = 0;
+    while(x > 0){
+        res += BIT[x];
+        x -= x&-x;
+    }
+    return res;
+}
+
+signed main(){
+    cin.tie(0)->ios_base::sync_with_stdio(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    if(fopen("buon.inp", "r")){
+        freopen("buon.inp", "r", stdin);
+        freopen("buon.out", "w", stdout);
+    }
+
+    cin >> numNode;
+
+    for(int i = 1; i < numNode; i++){
+        cin >> Q[i].u >> Q[i].v >> Q[i].w;
+
+        adj[Q[i].u].pb(Mp(Q[i].w, Q[i].v));
+        adj[Q[i].v].pb(Mp(Q[i].w, Q[i].u));
+    }
+
+    dfs(1, 0);
+
+    for(int i = 1; i <= numNode; i++){
+        upd(timeIn[i], a[i]);
+        upd(timeOut[i] + 1, -a[i]);
+    }
+
+    cin >> numQuery;
+
+    while(numQuery--){
+        int type; cin >> type;
+
+        if(type == 1){
+            int i, W; cin >> i >> W;
+
+            int u = Q[i].u;
+            int v = Q[i].v;
+            if(h[u] < h[v]) swap(u, v);
+
+            upd(timeIn[u], W - a[u]);
+            upd(timeOut[u] + 1, a[u] - W);
+            a[u] = W;
+        }
+        else{
+            int u, v; cin >> u >> v;
+            int p = lca(u, v);
+
+            ll ans = get(timeIn[u]) + get(timeIn[v]) - get(timeIn[p])*2;
+
+            cout << ans << el;
+        }
+    }
+
+    return 0;
+}   /// Justiin
