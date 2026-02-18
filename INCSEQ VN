@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int maxN = (int) 1e5 + 5;
+const int modulo = 5000000;
+
+int BIT[maxN][51];
+int N, K, arr[maxN];
+
+void add(int pos, int idx, int value){
+    for(; idx < maxN; idx += idx&-idx) BIT[idx][pos] = (BIT[idx][pos] + value) % modulo;
+}
+
+int get(int pos, int idx){
+    int ret = 0;
+    for(; idx > 0; idx -= idx&-idx) ret = (ret + BIT[idx][pos]) % modulo;
+    return ret;
+}
+
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+
+    cin >> N >> K;
+    for(int i = 1; i <= N; i++) cin >> arr[i], arr[i] += 3;
+
+    add(0, 1, 1);
+
+    for(int i = 1; i <= N; i++){
+        for(int j = K; j >= 1; j--){
+            int countArr = get(j - 1, arr[i] - 1);
+            add(j, arr[i], countArr);
+        }
+    }
+
+    cout << get(K, maxN - 1);
+
+    return 0;
+}
