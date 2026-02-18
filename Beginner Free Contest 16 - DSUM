@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fi first
+#define se second
+#define ll long long
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+#define Mp make_pair
+#define lg2(x) 31 - __builtin_clz(x)
+using pii = pair<int,int>;
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using ull = unsigned long long;
+
+/// code(
+
+signed main(){
+    cin.tie(0)->ios_base::sync_with_stdio(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    string s; cin >> s;
+    int ss = 0;
+    for(char c:s) ss += c - '0';
+
+    cout << ss;
+ 
+    return 0;
+}   /// Justiin
