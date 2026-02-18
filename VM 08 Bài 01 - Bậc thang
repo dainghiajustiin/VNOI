@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 1e5 + 7;
+int n, k;
+int f[maxn];
+bool dd[maxn];
+int mod = 14062008;
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> k;
+    while(k--){
+        int x; cin >> x;
+        dd[x] = 1;
+    }
+
+    if(dd[2]){
+        if(!dd[3]) f[3] = 1;
+    }
+    else{
+        f[2] = 1;
+        if(!dd[3]) f[3] = 2;
+    }
+
+    for(int i = 4; i <= n; i++){
+        if(!dd[i]){
+            f[i] = (f[i - 1] + f[i - 2]) % mod;
+        }
+    }
+
+    cout << f[n];
+
+    return 0;
+}
+///      Today is 02.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
