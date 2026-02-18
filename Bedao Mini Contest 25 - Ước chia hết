@@ -1,0 +1,143 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define pb push_back
+#define Mp make_pair
+using pii = pair<int,int>;
+int n, a, b, c, base;
+int S = 1;
+int ans = 0;
+
+const int len = (int) 1e7 + 3;
+int lp[len];
+vector<int> pr;
+
+void linear(){
+    for(int i = 2; i <= (int) 1e7; i++){
+        if(lp[i] == 0){
+            lp[i] = i;
+            pr.pb(i);
+        }
+
+        for(int j = 0; pr[j]*i <= (int) 1e7; j++){
+            lp[pr[j]*i] = pr[j];
+            if(lp[i] == pr[j]) break;
+        }
+    }
+}
+
+vector<pii> Get;
+vector<int> bigPri;
+
+map<int, bool> mp;
+void ok(int g){
+    if(g <= (int) 1e7) return;
+    if(mp[g]) return;
+
+    mp[g] = 1;
+    bigPri.pb(g);
+}
+
+bool dd[1000];
+void ql1(int id, int lim){
+    if(id > lim){
+        int S_ = S;
+        for(int i = 1; i <= lim; i++){
+            if(dd[i]) S_ *= bigPri[i - 1];
+        }
+
+        if(S_ == base){
+            for(int i = 1; i <= lim; i++){
+                if(dd[i]) Get.pb(Mp(bigPri[i - 1], (int) 1));
+            }
+        }
+
+        return;
+    }
+
+    dd[id] = 0;
+    ql1(id + 1, lim);
+
+    dd[id] = 1;
+    ql1(id + 1, lim);
+}
+
+int all[1000];
+void ql2(int id, int lim){
+    if(id > lim){
+        int tmp = 1;
+        for(int i = 1; i <= lim; i++){
+            for(int j = 1; j <= all[i]; j++){
+                tmp *= Get[i - 1].first;
+            }
+        }
+
+        int cnt = 0;
+        if(tmp % a == 0) cnt++;
+        if(tmp % b == 0) cnt++;
+        if(tmp % c == 0) cnt++;
+        if(cnt >= 2) ans++;
+        return;
+    }
+
+    for(int i = 0; i <= Get[id - 1].second; i++){
+        all[id] = i;
+        ql2(id + 1, lim);
+    }
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    cin >> n >> a >> b >> c; base = n;
+
+    linear();
+
+    for(int it:pr){
+        if(n % it == 0){
+            int cnt = 0;
+            while(n % it == 0){
+                n /= it;
+                cnt++;
+                S *= it;
+            }
+            Get.pb(Mp(it, cnt));
+        }
+    }
+
+    if(n == 1){
+        int sz = Get.size();
+        ql2(1, sz);
+
+        cout << ans;
+        return 0;
+    }
+
+    int root = sqrt(n);
+    if(root * root == n) Get.pb(Mp(root, (int) 2));
+    else{
+        int g;
+        g = __gcd(n, a);
+        ok(g);
+        ok(n/g);
+
+        g = __gcd(n, b);
+        ok(g);
+        ok(n/g);
+
+        g = __gcd(n, c);
+        ok(g);
+        ok(n/g);
+    }
+
+    int sz = bigPri.size();
+    if(sz) ql1(1, sz);
+
+    sz = Get.size();
+    ql2(1, sz);
+
+    cout << ans;
+
+    return 0;
+}
