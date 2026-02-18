@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define submit(x) freopen(x".inp", "r", stdin); freopen(x".out", "w", stdout);
+
+typedef long long ll;
+typedef pair<int,int> pii;
+typedef string str;
+typedef unsigned uns;
+
+const long long MOD = 1e9 + 7;
+const long long inf = 1e18 + 7;
+
+void input(){
+    if( fopen( "inp.txt", "r") ){
+        freopen( "inp.txt", "r", stdin );
+        freopen( "out.txt", "w", stdout );
+    }
+}
+
+// justiin
+
+vector<int> vec;
+int ok[26];
+int n, q;
+
+void ans(int base){
+    if(!ok[base]){
+        cout << vec.size() << el;
+        return;
+    }
+    ok[base] = 0;
+    base = (1 << base);
+
+    vector<int> temp;
+
+    for(int value:vec){
+        if(!(value & base)) temp.pb(value);
+    }
+
+    vec = temp;
+    cout << vec.size() << el;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    input();
+    //submit("")
+
+    cin >> n >> q;
+
+    while(n--){
+        string s; cin >> s;
+        int value = 0;
+
+        bool check[26];
+        for(int i = 0; i < 26; i++) check[i] = 0;
+
+        for(char c:s){
+            check[c - 'a'] = 1;
+            value = value | (1 << (c - 'a'));
+        }
+
+        for(int i = 0; i < 26; i++) ok[i] += check[i];
+
+        vec.pb(value);
+    }
+
+    while(q--){
+        char c; cin >> c;
+        int base = (c - 'a');
+
+        ans(base);
+    }
+
+
+    return 0;
+}
