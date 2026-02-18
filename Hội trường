@@ -1,0 +1,68 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 3e4 + 5;
+int n;
+int BIT[maxn];
+pii q[maxn];
+
+void upd(int idx, int val){
+    while(idx <= 30000){
+        BIT[idx] = max(BIT[idx], val);
+        idx += idx & -idx;
+    }
+}
+
+int get(int idx){
+    int res = 0;
+    while(idx){
+        res = max(res, BIT[idx]);
+        idx -= idx & -idx;
+    }
+    return res;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n;
+    for(int i = 1; i <= n; i++) cin >> q[i].fi >> q[i].se;
+    sort(q + 1, q + 1 + n);
+
+    for(int i = 1; i <= n; i++){
+        int p = q[i].fi, k = q[i].se;
+        int res = get(p);
+
+        res += k - p;
+
+        upd(k, res);
+    }
+
+    int ans = get(30000);
+
+    cout << ans;
+
+    return 0;
+}
+///      Today is 03.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
