@@ -1,0 +1,99 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = 102;
+int n, m, k;
+vector<pii> vec[maxn];
+int last[maxn][maxn];
+int val[maxn][maxn];
+
+void dijkstra(int i){
+    priority_queue<pii, vector<pii>, greater<pii>> pq;
+    pq.push(Mp(0, i));
+
+    last[i][i] = 0;
+    memset(val[i], 0x3f, sizeof val[i]);
+    val[i][i] = 0;
+
+    while(!pq.empty()){
+        int cost = pq.top().fi;
+        int u = pq.top().se;
+        pq.pop();
+
+        for(pii it:vec[u]){
+            int v = it.se;
+
+            if(val[i][v] > cost + it.fi){
+                val[i][v] = cost + it.fi;
+                last[i][v] = u;
+
+                pq.push(Mp(val[i][v], v));
+            }
+        }
+    }
+}
+
+vector<int> Find(int u, int v){
+    vector<int> res;
+    while(v != 0){
+        res.pb(v);
+        v = last[u][v];
+    }
+    reverse(all(res));
+    return res;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> m >> k;
+
+    while(m--){
+        int u, v, w;
+        cin >> u >> v >> w;
+        vec[u].pb(Mp(w, v));
+        vec[v].pb(Mp(w, u));
+    }
+
+    for(int i = 1; i <= n; i++){
+        dijkstra(i);
+    }
+
+    while(k--){
+        int type, u, v;
+        cin >> type >> u >> v;
+
+        if(type == 0){
+            cout << val[u][v] << el;
+        }
+        else{
+            vector<int> ans = Find(u, v); cout << ans.size() << ' ';
+            for(int it:ans) cout << it << ' ';
+            cout << el;
+        }
+    }
+
+    return 0;
+}
+///      Today is 07.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
