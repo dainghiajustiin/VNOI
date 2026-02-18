@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fi first
+#define se second
+#define ll long long
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+#define Mp make_pair
+#define lg2(x) 31 - __builtin_clz(x)
+using pii = pair<int,int>;
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using ull = unsigned long long;
+
+/// code
+const int maxn = (int) 1e5 + 3;
+
+int numNode, numQuery;
+vector<int> adj[maxn];
+int h[maxn];
+bool dd[maxn];
+
+void dfs(int u, int p){
+    for(int v:adj[u]){
+        if(v == p) continue;
+
+        h[v] = h[u] + 1;
+        dfs(v, u);
+    }
+}
+
+signed main(){
+    cin.tie(0)->ios_base::sync_with_stdio(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> numNode;
+
+    for(int i = 1; i <= numNode; i++){
+        h[i] = -1;
+        int x; cin >> x;
+        
+        if(x == i){
+            dd[i] = 1;
+        }
+        else{
+            adj[x].pb(i);
+            adj[i].pb(x);
+        }
+    }
+
+    for(int i = 1; i <= numNode; i++){
+        if(dd[i]){
+            h[i] = 1;
+            dfs(i, 0);
+        }
+    }
+
+    cin >> numQuery;
+    
+    while(numQuery--){
+        int x; cin >> x;
+        cout << h[x] << ' ';
+    }
+ 
+    return 0;
+}   /// Justiin
