@@ -1,0 +1,80 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 1e6 + 3;
+map<ll, pii> mp;
+
+pii mi(pii a, pii b){
+    if(a.fi < b.fi) return a;
+    return b;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    ll oo = (ll) 1e18;
+
+    for(ll i = 2; i < 1e6; i++){
+        ll x_n = i;
+        ll s = 1 + i;
+
+        for(int j = 2; s <= oo && x_n <= oo/i; j++){
+            x_n *= i;
+            s += x_n;
+
+            if(s <= oo){
+                if(mp.count(s) == 0) mp[s] = Mp(i, j);
+                else mp[s] = mi(mp[s], Mp(i, j));
+            }
+        }
+    }
+
+    int q; cin >> q;
+
+    while(q--){
+        ll n; cin >> n;
+
+        if(mp.count(n)) cout << mp[n].fi << ' ' << mp[n].se << el;
+        else{
+            ll l = 0, r = MOD;
+            ll Find = 0;
+
+            while(l <= r){
+                ll m = l + r >> 1;
+
+                if(m*(m + 1) <= n - 1){
+                    Find = m;
+                    l = m + 1;
+                }
+                else r = m - 1;
+            }
+
+            if(Find*(Find + 1) == n - 1 && Find != 0) cout << Find << ' ' << 2 << el;
+            else cout << -1 << el;
+        }
+    }
+
+    return 0;
+}
+///      Today is 15.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
