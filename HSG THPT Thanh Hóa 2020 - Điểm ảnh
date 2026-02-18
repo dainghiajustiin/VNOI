@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = (int) 1e6 + 3;
+
+int ans = 0;
+int nSize = 0;
+int a[N];
+int cnt[N];
+
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    #define TASK "CAU2"
+    if(fopen(TASK".inp", "r")){
+        freopen(TASK".inp", "r", stdin);
+        freopen(TASK".out", "w", stdout);
+//        freopen(TASK".ans", "w", stdout);
+    }
+
+    cin >> nSize;
+
+    for(int i = 1; i <= nSize; i++){
+        cin >> a[i];
+        cnt[a[i]]++;
+        ans = max(ans, cnt[a[i]]);
+    }
+
+    cout << ans;
+
+    return 0;
+}
