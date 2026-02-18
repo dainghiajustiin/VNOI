@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 1003;
+
+int a[N][N];
+int nSize, Count = 0;
+bool ok = 0;
+
+bool check1(){
+    for(int i = 1; i <= nSize; i++){
+        for(int j = 1; j <= nSize; j++){
+            if(a[i][j] < 0) return 0;
+        }
+    }
+
+    return 1;
+}
+
+bool check2(){
+    for(int i = 1; i <= nSize; i++){
+        int Sum = 0;
+        for(int j = 1; j <= nSize; j++){
+            if(j != i) Sum += a[i][j];
+        }
+
+        if(a[i][i] < Sum) return 0;
+        if(a[i][i] > Sum) Count++, ok = 1;
+    }
+
+    return 1;
+}
+
+bool check3(){
+    return ok;
+}
+
+void Input(){
+    cin >> nSize;
+    for(int i = 1; i <= nSize; i++){
+        for(int j = 1; j <= nSize; j++) cin >> a[i][j];
+    }
+}
+
+void Solve(){
+    if(check1() && check2() && check3()){
+        cout << "YES" << '\n';
+        cout << Count;
+    }
+    else cout << "NO";
+}
+
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    Input();
+    Solve();
+
+
+    return 0;
+}
