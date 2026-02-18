@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = (int) 2e5 + 3;
+
+int cntChild[N], nSize;
+vector<int> adj[N];
+
+void dfs(int u, int pre){
+    cntChild[u] += 1;
+
+    for(int v:adj[u]){
+        if(v == pre) continue;
+
+        dfs(v, u);
+        cntChild[u] += cntChild[v];
+    }
+}
+
+int findCentroid(int u, int pre){
+    for(int v:adj[u]){
+        if(v == pre) continue;
+
+        if(cntChild[v] > nSize/2) return findCentroid(v, u);
+    }
+
+    return u;
+}
+
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define TASK ""
+//    if(fopen(TASK".inp", "r")){
+//        freopen(TASK".inp", "r", stdin);
+//        freopen(TASK".out", "w", stdout);
+//        freopen(TASK".ans", "w", stdout);
+//    }
+
+    cin >> nSize;
+
+    for(int i = 1; i < nSize; i++){
+        int u, v; cin >> u >> v;
+
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    int root = 1;
+    dfs(root, 0);
+
+    cout << findCentroid(1, 0);
+
+    return 0;
+}
