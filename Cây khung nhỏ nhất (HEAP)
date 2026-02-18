@@ -1,0 +1,73 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 2e4 + 3;
+int n, m;
+int r[maxn];
+int ans = 0;
+
+struct dataa{
+    int u, v, w;
+} f[maxn];
+
+bool cmp(dataa A, dataa B){
+    return A.w < B.w;
+}
+
+int Find(int u){
+    return r[u] = (r[u] == u ? u : Find(r[u]));
+}
+
+void Union(int u, int v){
+    u = Find(u);
+    v = Find(v);
+    if(u == v) return;
+    r[v] = u;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> m;
+    for(int i = 1; i <= n; i++) r[i] = i;
+
+    for(int i = 1; i <= m; i++){
+        cin >> f[i].u >> f[i].v >> f[i].w;
+    }
+    sort(f + 1, f + 1 + m, cmp);
+
+    for(int i = 1; i <= m; i++){
+        int u = Find(f[i].u);
+        int v = Find(f[i].v);
+        if(u == v) continue;
+
+        ans += f[i].w;
+        Union(u, v);
+    }
+
+    cout << ans;
+
+    return 0;
+}
+///      Today is 05.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
