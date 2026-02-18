@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fi first
+#define se second
+#define ll long long
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+#define Mp make_pair
+using pii = pair<int,int>;
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using ull = unsigned long long;
+
+/// code
+const int maxn = (int) 1e4 + 3;
+int n, m;
+vector<int> vec[maxn];
+int cnt = 0;
+stack<int> st;
+int low[maxn], num[maxn];
+int res = 0;
+
+void tarjan(int u){
+    low[u] = num[u] = ++cnt;
+    st.push(u);
+
+    for(int v:vec[u]){
+        if(num[v] > 0){
+            low[u] = min(low[u], num[v]);
+        }
+        else{
+            tarjan(v);
+            low[u] = min(low[u], low[v]);
+        }
+    }
+
+    if(low[u] == num[u]){
+        res++;
+
+        int tmp;
+
+        do{
+            tmp = st.top(); st.pop();
+            low[tmp] = num[tmp] = MOD;
+        }
+        while(tmp != u);
+    }
+}
+
+signed main(){
+    cin.tie(0)->ios_base::sync_with_stdio(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    if(fopen("buon.inp", "r")){
+        freopen("buon.inp", "r", stdin);
+        freopen("buon.out", "w", stdout);
+    }
+
+    cin >> n >> m;
+
+    for(int i = 1; i <= m; i++){
+        int u, v; cin >> u >> v;
+        vec[u].pb(v);
+    }
+
+    for(int i = 1; i <= n; i++){
+        if(num[i] == 0) tarjan(i);
+    }
+
+    cout << res;
+
+    return 0;
+}   /// Justiin
