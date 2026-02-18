@@ -1,0 +1,96 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+#define ld long double
+
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using pii = pair<int,int>;
+using pld = pair<long double, long double>;
+
+/// code
+const ld pi = acos(-1);
+
+struct point{
+    ll x, y;
+} M, N;
+
+ll calc(point A, point B, point C){
+    ll res = (B.x - A.x) * (C.y - A.y) - (C.x - A.x) * (B.y - A.y);
+    if(res < 0) res = -res;
+
+    return res;
+}
+
+ld S, ans;
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> M.x >> M.y;
+    cin >> N.x >> N.y;
+
+    point base;
+    base.x = base.y = 0;
+
+    S = 1.0 * calc(base, M, N)/2;
+
+    ld c1 = sqrt(M.x*M.x + M.y*M.y);
+    ld c2 = sqrt(N.x*N.x + N.y*N.y);
+
+    ld D = sqrt(c1*c1 + c2*c2);
+    ld D_ = sqrt((M.x - N.x)*(M.x - N.x) + (M.y - N.y)*(M.y - N.y));
+
+    if(D >= D_){
+        ld L = 0, R = pi/2;
+
+        int C = 100;
+        while(C--){
+            ld alpha = 1.0*(L + R)/2;
+            ld S_ = c1 * c2 * sin(alpha)/2;
+
+            if(S >= S_){
+                ans = alpha;
+                L = alpha;
+            }
+            else R = alpha;
+        }
+
+        cout << fixed << setprecision(7) << ans;
+    }
+    else{
+        ld L = pi/2, R = pi;
+
+        int C = 100;
+        while(C--){
+            ld alpha = 1.0*(L + R)/2;
+            ld S_ = c1 * c2 * sin(alpha)/2;
+
+            if(S >= S_){
+                ans = alpha;
+                R = alpha;
+            }
+            else L = alpha;
+        }
+
+        cout << fixed << setprecision(7) << ans;
+    }
+
+    return 0;
+}
+///      Today is 08.10.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
