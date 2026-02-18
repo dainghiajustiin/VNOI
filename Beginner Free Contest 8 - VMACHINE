@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+
+void solve(){
+    ll n; cin >> n;
+    vector<ll> get;
+
+    while(n){
+        ll a = n/2, b = n - a;
+        if(b == a) b++;
+        get.pb(b);
+        n = a;
+    }
+
+    cout << get.size() << el;
+    for(ll it:get) cout << it << ' ';
+    cout << el;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    int t; cin >> t;
+    while(t--) solve();
+
+    return 0;
+}
+///      Today is 21.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
