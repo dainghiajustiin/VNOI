@@ -1,0 +1,77 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = 10001;
+
+int BIT[maxn][11];
+int n, k;
+int a[maxn];
+vector<int> zip;
+
+int get(int idx, int num){
+    int res = 0;
+    while(idx){
+        res = (res + BIT[idx][num]) % (MOD - 7);
+        idx -= idx & -idx;
+    }
+
+    return res;
+}
+
+void upd(int idx, int val, int num){
+    while(idx <= n){
+        BIT[idx][num] = (BIT[idx][num] + val) % (MOD - 7);
+        idx += idx & -idx;
+    }
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> k;
+    for(int i = 1; i <= n; i++) cin >> a[i], zip.pb(a[i]);
+
+    sort(all(zip));
+    zip.resize(unique(all(zip)) - zip.begin());
+
+    for(int i = n; i > 0; i--){
+        int idx = lower_bound(all(zip), a[i]) - zip.begin() + 1;
+        for(int j = k; j > 0; j--){
+            if(j == 1){
+                upd(idx, 1, 1);
+            }
+            else{
+                int res = get(idx - 1, j - 1);
+                upd(idx, res, j);
+            }
+        }
+    }
+
+    int ans = get(n, k);
+
+    cout << ans;
+
+    return 0;
+}
+///      Today is 20.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
