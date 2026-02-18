@@ -1,0 +1,128 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fi first
+#define se second
+#define ll long long
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+#define Mp make_pair
+#define lg2(x) 31 - __builtin_clz(x)
+using pii = pair<int,int>;
+const int MOD = (int) 1e9 + 7;
+const ll inf = (ll) 1e18 + 7;
+using ull = unsigned long long;
+
+/// code
+const int maxn = (int) 2e5 + 3;
+const int len = lg2(maxn) + 1;
+
+int par[maxn][len];
+int h[maxn];
+int r[maxn];
+bool dd[maxn];
+vector<int> adj[maxn];
+int numNode, numQuery;
+
+void dfs(int u, int p){
+    for(int v:adj[u]){
+        if(v == p) continue;
+
+        h[v] = h[u] + 1;
+        par[v][0] = u;
+
+        for(int i = 1; i < len; i++) par[v][i] = par[par[v][i - 1]][i - 1];
+
+        dfs(v, u);
+    }
+}
+
+int lca(int u, int v){
+    if(h[u] < h[v]) swap(u, v);
+
+    int diff = h[u] - h[v];
+
+    for(int i = 0; (1 << i) <= diff; i++){
+        if((diff >> i) & 1) u = par[u][i];
+    }
+
+    if(u == v) return u;
+
+    for(int i = lg2(h[u]); i > -1; i--){
+        if(par[u][i] != par[v][i]){
+            u = par[u][i];
+            v = par[v][i];
+        }
+    }
+
+    return par[u][0];
+}
+
+int Find(int u){
+    return r[u] = (r[u] == u ? u : Find(r[u]));
+}
+
+void Union(int u, int v){
+    u = Find(u);
+    v = Find(v);
+
+    if(u == v) return;
+    if(h[u] > h[v]) swap(u, v);
+
+    r[v] = u;
+}
+
+void Checking(int st, int en){
+    while(h[st] > h[en]){
+        if(!dd[st]) dd[st] = 1;
+
+        int p = Find(par[st][0]);
+
+        Union(st, p);
+        st = p;
+    }
+}
+
+signed main(){
+    cin.tie(0)->ios_base::sync_with_stdio(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    if(fopen("buon.inp", "r")){
+        freopen("buon.inp", "r", stdin);
+        freopen("buon.out", "w", stdout);
+    }
+
+    cin >> numNode;
+    for(int i = 1; i < numNode; i++){
+        int u, v; cin >> u >> v;
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }
+
+    for(int i = 1; i <= numNode; i++) r[i] = i;
+
+    dfs(1, 0);
+    dd[1] = 1;
+
+    cin >> numQuery;
+    while(numQuery--){
+        int u, v; cin >> u >> v;
+
+        int p = lca(u, v);
+
+        Checking(u, p);
+        Checking(v, p);
+    }
+
+    int ans = 0;
+    for(int i = 1; i <= numNode; i++)
+        if(!dd[i]) ans++;
+
+    cout << ans;
+
+    return 0;
+}   /// Justiin
