@@ -1,0 +1,72 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 6e4 + 5;
+int n;
+int a[maxn];
+int seg[maxn << 2];
+int ans = 0;
+
+void upd(int id, int l, int r, int pos){
+    if(pos < l || r < pos) return;
+    if(l == r){
+        seg[id]++;
+        return;
+    }
+
+    int m = l + r >> 1;
+
+    upd(id << 1, l, m, pos);
+    upd(id << 1 | 1, m + 1, r, pos);
+
+    seg[id] = seg[id << 1] + seg[id << 1 | 1];
+}
+int get(int id, int l, int r, int pos){
+    if(pos < l) return 0;
+    if(pos >= r) return seg[id];
+
+    int m = l + r >> 1;
+
+    int it1 = get(id << 1, l, m, pos);
+    int it2 = get(id << 1 | 1, m + 1, r, pos);
+
+    return it1 + it2;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n;
+    for(int i = 1; i <= n; i++) cin >> a[i];
+
+    for(int i = n; i; i--){
+        ans += get(1, 1, 60000, a[i] - 1);
+        upd(1, 1, 60000, a[i]);
+    }
+
+    cout << ans;
+
+    return 0;
+}
+///      Today is 03.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
