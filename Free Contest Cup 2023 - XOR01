@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int maxn = (int) 1e5 + 6;
+
+int a[maxn], cnt[maxn], n;
+long long ans = 0;
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    cin >> n;
+    for(int i = 1; i <= n; i++){
+        cin >> a[i];
+        a[i] >>= 1;
+        ans += cnt[a[i]];
+        cnt[a[i]]++;
+    }
+    cout << ans;
+
+    return 0;
+}
