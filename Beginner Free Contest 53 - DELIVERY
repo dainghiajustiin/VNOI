@@ -1,0 +1,87 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+vector<int> a;
+int n, m;
+int ans = 0;
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> m;
+
+
+    for(int i = 1; i <= n; i++){
+        int ai; cin >> ai;
+        if(ai != 0) a.pb(ai);
+    }
+
+    a.pb(inf); a.pb(-inf);
+
+    sort(all(a));
+
+    int i = 1, j = a.size() - 2;
+
+    int cnt = 1, s = inf;
+
+    while(1){
+        while(cnt <= m){
+           if(a[i] > 0){
+              cnt = inf;
+              break;
+           }
+           s = min(s, a[i]);
+           i++;
+           cnt++;
+        }
+        if(s < 0) ans -= 2*s;
+
+        if(cnt == inf) break;
+        cnt = 1;
+        s = inf;
+    }
+
+    cnt = 1, s = -inf;
+    while(1){
+        while(cnt <= m){
+           if(a[j] < 0){
+              cnt = inf;
+              break;
+           }
+           s = max(s, a[j]);
+           j--;
+           cnt++;
+        }
+        if(s > 0) ans += 2*s;
+
+        if(cnt == inf) break;
+        cnt = 1;
+        s = -inf;
+    }
+
+    cout << ans;
+
+    return 0;
+}
+///      Today is 02.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
