@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+int xu[35];
+int tong[35];
+int res;
+
+void solve(int id, int val, int s){
+    if(id == 0){
+        if(val == 0) res = max(res, s);
+        return;
+    }
+
+    if(res >= s + id) return;
+    if(val > tong[id]) return;
+
+    if(val >= xu[id]){
+        solve(id - 1, val - xu[id], s + 1);
+    }
+
+    solve(id - 1, val, s);
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    xu[1] = 2;
+    xu[2] = 3;
+    xu[3] = 5;
+    for(int i = 4; i <= 34; i++) xu[i] = xu[i - 1] + xu[i - 2] + xu[i - 3];
+    for(int i = 1; i <= 34; i++) tong[i] = tong[i - 1] + xu[i];
+
+    int t; cin >> t;
+    for(int i = 1; i <= t; i++){
+        int n; cin >> n;
+
+        res = -1;
+        solve(34, n, 0);
+
+        cout << "Case #" << i << ": " << res << el;
+    }
+
+    return 0;
+}
+///      Today is 04.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
