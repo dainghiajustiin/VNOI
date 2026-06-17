@@ -1,0 +1,130 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 2e5 + 3;
+int n, q, ans = 0;
+int a[maxn];
+bool dd[maxn];
+pii seg[maxn << 2];
+
+void build(int id, int l, int r){
+    if(l == r){
+        seg[id].fi = a[l];
+        return;
+    }
+
+    int m = l + r >> 1;
+
+    build(id << 1, l, m);
+    build(id << 1 | 1, m + 1, r);
+}
+
+void down(int id){
+    int k = seg[id].se;
+    seg[id].se = 0;
+
+    seg[id << 1].fi += k;
+    seg[id << 1].se += k;
+
+    seg[id << 1 | 1].fi += k;
+    seg[id << 1 | 1].se += k;
+}
+
+void upd(int id, int l, int r, int u, int v, int x){
+    if(v < l || r < u) return;
+    if(u <= l && r <= v){
+        seg[id].fi += x;
+        seg[id].se += x;
+        return;
+    }
+
+    down(id);
+    int m = l + r >> 1;
+
+    upd(id << 1, l, m, u, v, x);
+    upd(id << 1 | 1, m + 1, r, u, v, x);
+}
+
+int get(int id, int l, int r, int pos){
+    if(pos < l || r < pos) return -inf;
+    if(l == r) return seg[id].fi;
+
+    down(id);
+    int m = l + r >> 1;
+
+    int it1 = get(id << 1, l, m, pos);
+    int it2 = get(id << 1 | 1, m + 1, r, pos);
+
+    return max(it1, it2);
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> q;
+    for(int i = 1; i <= n; i++) cin >> a[i];
+
+    for(int i = 1; i < n; i++){
+        dd[i] = (a[i] > a[i + 1]);
+        ans += dd[i];
+    }
+
+    build(1, 1, n);
+
+    while(q--){
+        int l, r, x;
+        cin >> l >> r >> x;
+
+        upd(1, 1, n, l, r, x);
+
+        int it1, it2;
+
+        if(1 < l){
+            it1 = get(1, 1, n, l - 1);
+            it2 = get(1, 1, n, l);
+
+            if((it1 > it2) != dd[l - 1]){
+                if(dd[l - 1]) ans--;
+                else ans++;
+                dd[l - 1] = (it1 > it2);
+            }
+        }
+
+        if(r < n){
+            it1 = get(1, 1, n, r);
+            it2 = get(1, 1, n, r + 1);
+
+            if((it1 > it2) != dd[r]){
+                if(dd[r]) ans--;
+                else ans++;
+                dd[r] = (it1 > it2);
+            }
+        }
+
+        cout << ans << el;
+    }
+
+    return 0;
+}
+///      Today is 04.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
