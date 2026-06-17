@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 1003;
+int n, m, k;
+int a[maxn][maxn];
+
+void change(int u, int v, int p, int q, int color){
+    for(int i = u; i <= p; i++){
+        for(int j = v; j <= q; j++){
+            if(a[i][j] == 0 || a[i][j] == color) a[i][j] = color;
+            else a[i][j] = 0;
+        }
+    }
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> m >> k;
+    for(int i = 1; i <= 2*k; i++){
+        int u, v; cin >> u >> v;
+        int color = (i & 1 ? 1 : 2);
+        change(u - 1, v - 1, u + 1, v + 1, color);
+    }
+
+    int _1 = 0, _2 = 0;
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= m; j++){
+            if(a[i][j] == 1) _1++;
+            if(a[i][j] == 2) _2++;
+        }
+    }
+
+    cout << _1 << ' ' << _2;
+
+    return 0;
+}
+///      Today is 02.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
