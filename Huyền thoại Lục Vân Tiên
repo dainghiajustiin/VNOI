@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 2e4 + 3;
+int a[maxn];
+
+void solve(){
+    deque<int> dq;
+    int n, k;
+    cin >> n >> k;
+    for(int i = 1; i <= n; i++) cin >> a[i];
+
+    for(int i = 1; i < k; i++){
+        while(!dq.empty() && a[dq.back()] >= a[i]) dq.pop_back();
+        dq.pb(i);
+    }
+
+    for(int i = k; i <= n; i++){
+        while(!dq.empty() && dq.front() <= i - k) dq.pop_front();
+        while(!dq.empty() && a[dq.back()] >= a[i]) dq.pop_back();
+        dq.pb(i);
+
+        cout << a[dq.front()] << ' ';
+    }
+
+    cout << el;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    int t; cin >> t;
+    while(t--){
+        solve();
+    }
+
+    return 0;
+}
+///      Today is 03.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
