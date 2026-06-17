@@ -1,0 +1,91 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+int n, S;
+vector<pii> subset[2];
+vector<pii> Vec[2];
+bool dd[21];
+
+void backtrack(int id, int Lim, int num){
+    if(id == Lim){
+        pii res = Mp(0, 0);
+        for(int i = 0; i < Lim; i++){
+            if(dd[i]) res.fi += subset[num][i].fi, res.se += subset[num][i].se;
+        }
+
+        Vec[num].pb(res);
+
+        return;
+    }
+
+    dd[id] = 0;
+    backtrack(id + 1, Lim, num);
+
+    dd[id] = 1;
+    backtrack(id + 1, Lim, num);
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> S;
+
+    for(int i = 1; i <= n/2; i++){
+        int w, v; cin >> w >> v;
+        subset[0].pb(Mp(w, v));
+    }
+
+    for(int i = n/2 + 1; i <= n; i++){
+        int w, v; cin >> w >> v;
+        subset[1].pb(Mp(w, v));
+    }
+
+    memset(dd, 0, sizeof dd);
+    backtrack(0, n/2, 0);
+
+    memset(dd, 0, sizeof dd);
+    backtrack(0, n - n/2, 1);
+
+    sort(all(Vec[1]));
+
+    for(int i = 1; i < Vec[1].size(); i++){
+        Vec[1][i].se = max(Vec[1][i].se, Vec[1][i - 1].se);
+    }
+
+    int ans = 0;
+    for(pii it:Vec[0]){
+        int pivot = upper_bound(all(Vec[1]), Mp(S - it.fi, -inf)) - Vec[1].begin();
+
+        if(pivot == Vec[1].size()) pivot--;
+        if(Vec[1][pivot].fi + it.fi > S) pivot--;
+        if(pivot < 0) continue;
+
+        ans = max(ans, Vec[1][pivot].se + it.se);
+    }
+
+    cout << ans;
+
+    return 0;
+}
+///      Today is 04.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
