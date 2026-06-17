@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = 503;
+int a[maxn][maxn];
+int n;
+
+bool okPos(int i, int j){
+    return i && j && i <= n && j <= n;
+}
+int dx[4] = {0, -1, 1, 0};
+int dy[4] = {-1, 0, 0, 1};
+
+bool check(int m){
+    bool b[n + 3][n + 3];
+    memset(b, 0, sizeof b);
+
+    b[1][1] = 1;
+    queue<pii> q;
+    q.push(Mp(1, 1));
+
+    while(!q.empty()){
+        pii u = q.front(); q.pop();
+
+        for(int _ = 0; _ < 4; _++){
+            pii v = Mp(u.fi + dx[_], u.se + dy[_]);
+            if(okPos(v.fi, v.se) && !b[v.fi][v.se] && abs(a[u.fi][u.se] - a[v.fi][v.se]) <= m){
+                b[v.fi][v.se] = 1;
+                q.push(v);
+            }
+        }
+    }
+
+    return b[n][n];
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n;
+    int l = 0, r = (int) 1e6;
+
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= n; j++){
+            cin >> a[i][j];
+        }
+    }
+
+    int ans;
+
+    while(l <= r){
+        int m = l + r >> 1;
+        if(check(m)){
+            ans = m;
+            r = m - 1;
+        }
+        else l = m + 1;
+    }
+
+    cout << ans;
+
+    return 0;
+}
+///      Today is 02.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
