@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+void solve(){
+    string s; cin >> s;
+    int cnt = 0;
+    stack<char> st;
+    for(char c:s){
+        if(c == '(') st.push(c);
+        else if(c == ')'){
+            if(st.size()){
+                cnt++;
+                st.pop();
+            }
+        }
+    }
+    cnt <<= 1;
+    cout << cnt;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    int t; t = 1;
+    while(t--) solve();
+
+    return 0;
+}
+///      Today is 02.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
