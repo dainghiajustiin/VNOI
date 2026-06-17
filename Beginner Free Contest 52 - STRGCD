@@ -1,0 +1,88 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+string s;
+string t;
+int n, m, g;
+
+bool cmp(int a, int b){
+    return a > b;
+}
+
+const int maxn = (int) 1e5 + 3;
+int p[maxn];
+int hs[maxn];
+int ht[maxn];
+int base = 137, mm = MOD * MOD;
+
+bool check(int val, int len){
+    for(int i = len ; i <= n; i += len){
+        if((hs[i] - hs[i - len] * p[len] + mm) % MOD != val) return 0;
+    }
+
+    for(int i = len ; i <= m; i += len){
+        if((ht[i] - ht[i - len] * p[len] + mm) % MOD != val) return 0;
+    }
+
+    return 1;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> s; n = s.size(); s = ' ' + s;
+    cin >> t; m = t.size(); t = ' ' + t;
+
+    int g = __gcd(n, m);
+
+    vector<int> vec;
+    for(int i = 1; i * i <= g; i++){
+        if(g % i == 0){
+            vec.pb(i);
+            if(i * i != g) vec.pb(g/i);
+        }
+    }
+    sort(all(vec), cmp);
+
+    p[0] = 1;
+    for(int i = 1; i <= (int) 1e5; i++) p[i] = p[i - 1] * base % MOD;
+
+    hs[0] = 0;
+    for(int i = 1; i <= n; i++) hs[i] = (hs[i - 1] * base + s[i]) % MOD;
+
+    ht[0] = 0;
+    for(int i = 1; i <= m; i++) ht[i] = (ht[i - 1] * base + t[i]) % MOD;
+
+    for(int it:vec){
+        if(check(hs[it], it)){
+            cout << s.substr(1, it);
+            return 0;
+        }
+    }
+
+    cout << "NOT FOUND";
+
+    return 0;
+}
+///      Today is 02.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
