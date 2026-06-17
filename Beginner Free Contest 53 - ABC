@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 1e6 + 3;
+int lp[maxn];
+vector<int> pr;
+
+void linear(){
+    for(int i = 2; i <= (int) 1e6; i++){
+        if(lp[i] == 0){
+            lp[i] = i;
+            pr.pb(i);
+        }
+
+        for(int j = 0; pr[j]*i <= (int) 1e6; j++){
+            lp[ pr[j]*i ] = pr[j];
+            if(lp[i] == pr[j]) break;
+        }
+    }
+}
+
+int get(int n){
+    int res = 1;
+    int s = 1;
+    while(n != 1){
+        if(lp[n] == lp[n/lp[n]]) s++;
+        else{
+            res *= (s + 1);
+            s = 1;
+        }
+        n /= lp[n];
+    }
+
+    return res;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    linear();
+    int n; cin >> n;
+
+    int ans = 0;
+
+    for(int c = 1; c < n; c++){
+        int cnt = get(n - c);
+        ans += cnt;
+    }
+
+    cout << ans;
+
+    return 0;
+}
+///      Today is 02.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
