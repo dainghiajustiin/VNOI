@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+int P(int a, int b){
+    if(!b) return 1;
+    int res = P(a, b >> 1) % MOD;
+    res = res * res % MOD;
+    if(b & 1) res = res * a % MOD;
+    return res;
+}
+
+int solve(int n, int k){ /// tinh
+    if(n < k) return 0;
+    if(k == 0) return 1;
+    if(k > n - k) return solve(n, n - k);
+
+    int a = 1, b = 1;
+    for(int i = 1; i <= k; i++){
+        a = a * (n - i + 1) % MOD;
+        b = b * i % MOD;
+    }
+
+    return a * P(b, MOD - 2) % MOD;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    int n, k; cin >> n >> k;
+
+    int ans = solve(n - k + 1, k);
+
+    cout << ans;
+
+    return 0;
+}
+///      Today is 02.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
