@@ -1,0 +1,72 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+const int maxn = (int) 1e6 + 3;
+int n, p, a, b, r;
+int cnt[maxn];
+bool dd[maxn];
+
+void bfs(){
+    n %= p;
+    cnt[n] = 0;
+
+    queue<int> q;
+    q.push(n);
+
+    while(!q.empty()){
+        int k = q.front(); q.pop();
+
+        if(!dd[(k + a) % p]){
+            cnt[(k + a) % p] = cnt[k] + 1;
+            q.push((k + a) % p);
+            dd[(k + a) % p] = 1;
+        }
+
+        if(!dd[(k + b) % p]){
+            cnt[(k + b) % p] = cnt[k] + 1;
+            q.push((k + b) % p);
+            dd[(k + b) % p] = 1;
+        }
+
+        if(!dd[(k + a + b) % p]){
+            cnt[(k + a + b) % p] = cnt[k] + 1;
+            q.push((k + a + b) % p);
+            dd[(k + a + b) % p] = 1;
+        }
+    }
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> p;
+    cin >> a >> b >> r;
+    memset(cnt, 0x3f, sizeof cnt);
+    bfs();
+
+    cout << (cnt[r] > inf ? -1 : cnt[r]);
+
+    return 0;
+}
+///      Today is 02.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
