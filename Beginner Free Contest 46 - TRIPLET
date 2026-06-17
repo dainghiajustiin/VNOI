@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define Mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define all(x) x.begin(), x.end()
+
+const int MOD = (int) 1e9 + 7;
+const int inf = (int) 1e18 + 7;
+using pii = pair<int,int>;
+
+/// code
+int n, s;
+int ans = 0;
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+//    #define task ""
+//    freopen(task".inp", "r", stdin);
+//    freopen(task".out", "w", stdout);
+
+    cin >> n >> s;
+
+    for(int c = n; c >= 0; c--){
+        for(int b = c; b >= 0; b--){
+            int a = s - b - c;
+            if(0 <= a && a <= b){
+                if(c == a) ans++;
+                else if(a == b || b == c) ans += 3;
+                else ans += 6;
+            }
+        }
+    }
+
+    cout << ans;
+
+    return 0;
+}
+///      Today is 03.09.2024
+///    Do your best because tomorrow will be better!
+///                                sign
+///                               Justiin
