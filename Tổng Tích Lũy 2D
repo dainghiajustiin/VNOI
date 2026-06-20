@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAXN = 1010;
+
+int n, m, q;
+long long a[MAXN][MAXN];
+
+long long get(int u, int v, int p, int q){
+    return a[p][q] + a[u-1][v-1]
+          -a[p][v-1] -a[u-1][q];
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    cin >> n >> m >> q;
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= m; j++){
+            cin >> a[i][j];
+            a[i][j] += a[i][j-1];
+        }
+    }
+
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= m; j++){
+            a[i][j] += a[i-1][j];
+        }
+    }
+
+    while(q-->0){
+        int u, v, p, q;
+        cin >> u >> v >> p >> q;
+        cout << get(u, v, p, q) << '\n';
+    }
+
+    return 0;
+}
