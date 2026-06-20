@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAXN = (int) 1e5 + 7;
+int n, a[MAXN], maxNegative = -1000000009, isValid = 0;
+long long ans = 0, s = 0;
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    cin >> n;
+    for(int i = 1; i <= n; i++){
+        cin >> a[i];
+        if(a[i] >= 0) isValid = 1;
+        if(a[i] < 0) maxNegative = max(maxNegative, a[i]);
+        s = max(s + a[i], 0ll);
+        ans = max(ans, s);
+    }
+
+    if(!isValid) ans = maxNegative;
+    cout << ans;
+
+    return 0;
+}
