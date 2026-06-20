@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int mod = 111539786;
+
+struct Matrix{
+    int x[2][2];
+
+    Matrix(){
+        memset(x, 0, sizeof x);
+    }
+
+    friend Matrix operator * (const Matrix& A, const Matrix& B){
+        Matrix C;
+        for(int i = 0; i < 2; i++){
+            for(int j = 0; j < 2; j++){
+                for(int k = 0; k < 2; k++){
+                    C.x[i][j] = (C.x[i][j] + 1ll * A.x[i][k] * B.x[k][j]) % mod;
+                }
+            }
+        }
+
+        return C;
+    }
+
+    friend Matrix pw(Matrix A, int N){
+        Matrix res;
+        res.x[0][0] = res.x[1][1] = 1;
+        while(N > 0){
+            if(N & 1) res = res * A;
+            A = A * A;
+            N >>= 1;
+        }
+        return res;
+    }
+};
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    Matrix A;
+    A.x[0][0] = 1, A.x[0][1] = 1;
+    A.x[1][0] = 1, A.x[1][1] = 0;
+
+    int nTest = 0;
+    cin >> nTest;
+    for(int i = 1; i <= nTest; i++){
+        int N; cin >> N;
+        cout << pw(A, N).x[0][0] << '\n';
+    }
+
+    return 0;
+}
