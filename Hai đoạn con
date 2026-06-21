@@ -1,0 +1,67 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int INF = 1000000009;
+const int MAXN = (int) 3e5 + 7;
+
+struct Node{
+    long long left = 0;
+    long long right = 0;
+    long long sum = 0;
+    long long maxSum = 0;
+
+    Node(long long value = 0){
+        left = right = sum = maxSum = value;
+    }
+} IT[MAXN << 2];
+
+int n, a[MAXN];
+long long s = -INF;
+
+Node get(int id, int l, int r, int u, int v){
+    if(v < l || r < u){
+        Node res(-INF);
+        return res;
+    }
+    if(u <= l && r <= v) return IT[id];
+
+    int mid = (l + r) >> 1;
+    Node it1 = get(id << 1, l, mid, u, v);
+    Node it2 = get(id << 1 | 1, mid + 1, r, u, v);
+    Node res;
+    res.left = max(it1.left, it1.sum + it2.left);
+    res.right = max(it2.right, it2.sum + it1.right);
+    res.sum = it1.sum + it2.sum;
+    res.maxSum = max({it1.right + it2.left, it1.maxSum, it2.maxSum});
+    return res;
+}
+
+void build(int id, int l, int r){
+    if(l == r){
+        IT[id] = Node(a[l]);
+        return;
+    }
+    int mid = (l + r) >> 1;
+    build(id << 1, l, mid);
+    build(id << 1 | 1, mid + 1, r);
+    Node it1 = IT[id << 1];
+    Node it2 = IT[id << 1 | 1];
+    IT[id].left = max(it1.left, it1.sum + it2.left);
+    IT[id].right = max(it2.right, it2.sum + it1.right);
+    IT[id].sum = it1.sum + it2.sum;
+    IT[id].maxSum = max({it1.right + it2.left, it1.maxSum, it2.maxSum});
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    cin >> n;
+    for(int i = 1; i <= n; i++) cin >> a[i];
+    build(1, 1, n);
+    for(int i = 1; i < n; i++)
+        s = max(s, get(1, 1, n, 1, i).maxSum + get(1, 1, n, i + 1, n).maxSum);
+    cout << s;
+
+    return 0;
+}
