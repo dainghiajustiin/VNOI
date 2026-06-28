@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAXN = (int) 1e7 + 5;
+int a[MAXN], n, cnt = 0;
+long long ans = 0;
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    freopen("csbn.inp", "r", stdin);
+    freopen("csbn.out", "w", stdout);
+
+    cin >> n;
+    for(int i = 1; i <= n; i++) cin >> a[i];
+    sort(a + 1, a + 1 + n);
+    a[n+1] = -1;
+    for(int i = 1; i <= n; i++){
+        if(a[i] == a[i-1]) cnt++;
+        else{
+            ans += 1ll*cnt*(cnt+1)/2;
+            cnt = 0;
+        }
+    }
+    ans += 1ll*cnt*(cnt+1)/2;
+    cout << ans;
+
+    return 0;
+}
