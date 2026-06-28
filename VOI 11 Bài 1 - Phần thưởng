@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int maxn = 1002;
+
+long long pre[maxn][maxn], ans = 0;
+int n, k, a[maxn][maxn];
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    cin >> n >> k;
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= n; j++){
+            cin >> a[i][j];
+            pre[i][j] = pre[i][j-1] + a[i][j];
+        }
+    }
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= n; j++){
+            pre[i][j] += pre[i-1][j];
+        }
+    }
+    for(int i = 1; i + k - 1 <= n; i++){
+        for(int j = 1; j + k - 1 <= n; j++){
+            int u = i + k - 1;
+            int v = j + k - 1;
+            ans = max(ans, pre[u][v] + pre[i-1][j-1] - pre[u][j-1] - pre[i-1][v]);
+        }
+    }
+    cout << ans;
+
+    return 0;
+}
