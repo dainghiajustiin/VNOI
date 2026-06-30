@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+const int MAXN = (int) 1e6 + 1;
+bool p[MAXN];
+vector<pair<int, int>> v;
+
+void snt(){
+    for(int i = 2; i * i < MAXN; i++){
+        if(p[i] == 0){
+            for(int j = i * i; j < MAXN; j += i) p[j] = 1;
+        }
+    }
+
+    for(int i = 2; i < MAXN; i++){
+        if(p[i] == 0){
+            int a = 1;
+            while(a * i < MAXN) a *= i;
+            v.push_back({a, i});
+        }
+    }
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    snt();
+    int ans = 1;
+    long long cur = 1, limit = (long long) 1e18;
+
+    for(pair<int, int> elm:v){
+        int n = elm.first;
+        int pri = elm.second;
+        if(limit/cur >= n){
+            cur *= n;
+        }
+        else{
+            cout << "ucln " << cur << endl;
+            int q; cin >> q;
+            if(q > 1){
+                ans *= q;
+            }
+            cur = n;
+        }
+    }
+
+    if(cur > 1){
+        cout << "ucln " << cur << endl;
+        int q; cin >> q;
+        if(q > 1){
+            ans *= q;
+        }
+    }
+
+    cout << "traloi " << ans << endl;
+
+    return 0;
+}
