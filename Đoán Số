@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    int lo = 0, hi = (int) 2e9 + 2;
+
+    while(lo <= hi){
+        int mid = lo + (hi - lo)/2;
+        cout << mid << endl;
+        string s;
+        cin >> s;
+        if(s == "SMALLER"){
+            hi = mid;
+        }
+        else if(s == "BIGGER"){
+            lo = mid;
+        }
+        else{
+            break;
+        }
+    }
+
+    return 0;
+}
