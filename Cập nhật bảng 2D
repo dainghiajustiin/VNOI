@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int arr[1010][1010], n, m, q;
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    cin >> n >> m >> q;
+    for(;q-->0;){
+        int a, b, c, d;
+        cin >> a >> b >> c >> d;
+        arr[a][b] += 1;
+        arr[c+1][d+1] += 1;
+        arr[a][d+1] -= 1;
+        arr[c+1][b] -= 1;
+    }
+
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= m; j++){
+            arr[i][j] += arr[i][j-1];
+        }
+    }
+
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= m; j++){
+            arr[i][j] += arr[i-1][j];
+        }
+    }
+
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= m; j++){
+            cout << arr[i][j] << ' ';
+        }
+        cout << '\n';
+    }
+
+    return 0;
+}
