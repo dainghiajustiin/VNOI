@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAXN = (int) 5e6 + 7;
+int lp[MAXN], cnt[MAXN], n;
+vector<int> pr;
+long long ans = 0;
+
+void init(){
+    for(int i = 2; i < MAXN; i++){
+        if(lp[i] == 0){
+            lp[i] = i;
+            pr.push_back(i);
+        }
+
+        for(int elm:pr){
+            if(elm*i >= MAXN) break;
+            lp[elm*i] = elm;
+            if(elm == lp[i]) break;
+        }
+    }
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    init();
+    cin >> n;
+    for(int i = 1; i <= n; i++){
+        int Value = i, num = 1;
+        int lastPrime = 1, cntPrime = 0;
+
+        while(Value > 1){
+            if(lp[Value] != lastPrime){
+                if(cntPrime&1) num *= lastPrime;
+                lastPrime = lp[Value];
+                cntPrime = 1;
+            }
+            else cntPrime++;
+            Value /= lp[Value];
+        }
+
+        if(cntPrime&1) num *= lastPrime;
+        cnt[num] += 1;
+    }
+
+    for(int i = 1; i <= n; i++){
+        if(cnt[i] > 0){
+            ans += 1ll*cnt[i]*(cnt[i]-1)*(cnt[i]-2)/6;
+        }
+    }
+
+    cout << ans;
+
+    return 0;
+}
