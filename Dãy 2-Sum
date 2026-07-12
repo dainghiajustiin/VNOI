@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAXN = 5010;
+
+long long a[MAXN];
+int n, ans = 0;
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    cin >> n;
+    for(int i = 1; i <= n; i++) cin >> a[i], a[i] += a[i-1];
+    for(int i = 1; i <= n; i++){
+        for(int j = i; j <= n; j++){
+            long long TotalSum = a[j] - a[i-1];
+            if(TotalSum&1) continue;
+            long long Target = a[i-1] + TotalSum/2;
+            int it = lower_bound(a + i, a + j + 1, Target) - a;
+            if(a[it] == Target) ans = max(ans, j - i + 1);
+        }
+    }
+    cout << ans;
+
+    return 0;
+}
