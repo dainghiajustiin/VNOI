@@ -1,0 +1,81 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAXN = (int) 250001;
+
+struct Query{
+    int l, r, k, id, ans;
+} queries[MAXN];
+
+int BIT[MAXN];
+int n, q, arr[MAXN], blockSize = 1;
+vector<int> zip;
+
+void add(int idx, int value){
+    for(; idx < MAXN; idx += idx&-idx) BIT[idx] += value;
+}
+
+int get(int idx){
+    int res = 0;
+    for(; idx > 0; idx -= idx&-idx) res += BIT[idx];
+    return res;
+}
+
+bool cmpRange(const Query& A, const Query& B){
+    if(A.l/blockSize == B.l/blockSize) return A.r < B.r;
+    return A.l/blockSize < B.l/blockSize;
+}
+
+bool cmpId(const Query& A, const Query& B){
+    return A.id < B.id;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    cin >> n;
+    blockSize = (int) sqrt(n);
+    for(int i = 1; i <= n; i++) cin >> arr[i], zip.push_back(arr[i]);
+    cin >> q;
+    for(int i = 1; i <= q; i++){
+        cin >> queries[i].l >> queries[i].r >> queries[i].k;
+        queries[i].id = i;
+        zip.push_back(queries[i].k);
+    }
+    sort(queries + 1, queries + 1 + q, cmpRange);
+
+    sort(zip.begin(), zip.end());
+    zip.resize(unique(zip.begin(), zip.end()) - zip.begin());
+    for(int i = 1; i <= n; i++) arr[i] = lower_bound(zip.begin(), zip.end(), arr[i]) - zip.begin() + 1;
+    for(int i = 1; i <= q; i++) queries[i].k = lower_bound(zip.begin(), zip.end(), queries[i].k) - zip.begin() + 1;
+
+    int L = 1, R = 0;
+    for(int i = 1; i <= q; i++){
+        int curL = queries[i].l;
+        int curR = queries[i].r;
+
+        while(R < curR){
+            R++;
+            add(arr[R], 1);
+        }
+        while(L > curL){
+            L--;
+            add(arr[L], 1);
+        }
+        while(R > curR){
+            add(arr[R], -1);
+            R--;
+        }
+        while(L < curL){
+            add(arr[L], -1);
+            L++;
+        }
+
+        queries[i].ans = get(MAXN-1) - get(queries[i].k);
+    }
+    sort(queries + 1, queries + 1 + q, cmpId);
+    for(int i = 1; i <= q; i++) cout << queries[i].ans << '\n';
+
+    return 0;
+}
